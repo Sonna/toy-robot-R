@@ -49,6 +49,26 @@ setMethod(f="right", signature="Robot", definition=function(object) {
     return(object)
 })
 
+setGeneric(name="exec", def=function(object, command, args="") {
+    standardGeneric("exec")
+})
+setMethod(f="exec", signature="Robot",
+  definition=function(object, command, args="") {
+    new_object <- switch(command,
+      # "MOVE" = ,
+      "LEFT" = left(object),
+      "RIGHT" = right(object),
+      "REPORT" = report(object)
+    )
+
+    if (is.null(new_object)) {
+      return(object)
+    }
+    else {
+      return(new_object)
+    }
+})
+
 
 setClass("ToyRobot", slots=list(nil="character"), prototype=list(nil=""))
 
