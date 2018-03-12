@@ -1,0 +1,8 @@
+image: r-base:latest
+
+before_script:
+  - bin/setup
+
+test:
+  script:
+  - bin/test

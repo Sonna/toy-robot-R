@@ -25,3 +25,6 @@
 
 - [r\-lib/testthat: An R 📦 to make testing 😀]
   (https://github.com/r-lib/testthat)
+
+- [Make readline wait for input in R \- Stack Overflow]
+  (https://stackoverflow.com/questions/27112370/make-readline-wait-for-input-in-r)
