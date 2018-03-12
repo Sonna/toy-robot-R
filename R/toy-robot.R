@@ -1,5 +1,14 @@
 library(methods)
 
+make.move <- function() {
+  return(list(
+    "NORTH" = list("x" =  0, "y" =  1),
+    "SOUTH" = list("x" =  0, "y" = -1),
+    "EAST"  = list("x" =  1, "y" =  0),
+    "WEST"  = list("x" = -1, "y" =  0)
+  ))
+}
+
 make.turn <- function() {
   return(list(
     "NORTH" = list("LEFT" = "WEST",  "RIGHT" = "EAST"),
@@ -49,13 +58,31 @@ setMethod(f="right", signature="Robot", definition=function(object) {
     return(object)
 })
 
+setGeneric(name="move", def=function(object) {
+    standardGeneric("move")
+})
+setMethod(f="move", signature="Robot", definition=function(object) {
+    object@x <- object@x + make.move()[[object@facing]][["x"]]
+    object@y <- object@y + make.move()[[object@facing]][["y"]]
+
+    if (object@x < 0 || object@x > 4) {
+      object@x <- object@x - make.move()[[object@facing]][["x"]]
+    }
+
+    if (object@y < 0 || object@y > 4) {
+      object@y <- object@y - make.move()[[object@facing]][["y"]]
+    }
+
+    return(object)
+})
+
 setGeneric(name="exec", def=function(object, command, args="") {
     standardGeneric("exec")
 })
 setMethod(f="exec", signature="Robot",
   definition=function(object, command, args="") {
     new_object <- switch(command,
-      # "MOVE" = ,
+      "MOVE" = move(object),
       "LEFT" = left(object),
       "RIGHT" = right(object),
       "REPORT" = report(object)

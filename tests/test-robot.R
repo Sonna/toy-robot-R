@@ -33,6 +33,96 @@ test_that('Robot can turn right', {
   expect_equal(new_subject@facing, "EAST")
 })
 
+test_that('Robot can move', {
+  subject <- new("Robot")
+  new_subject <- move(subject)
+
+  expect_equal(new_subject@x, 0)
+  expect_equal(new_subject@y, 1)
+  expect_equal(new_subject@facing, "NORTH")
+})
+
+test_that('Robot can move EAST', {
+  subject <- new("Robot", facing="EAST")
+  new_subject <- move(subject)
+
+  expect_equal(new_subject@x, 1)
+  expect_equal(new_subject@y, 0)
+  expect_equal(new_subject@facing, "EAST")
+})
+
+test_that('Robot cannot fall off 0,0,SOUTH', {
+  subject <- new("Robot", x=0, y=0, facing="SOUTH")
+  new_subject <- move(subject)
+
+  expect_equal(new_subject@x, 0)
+  expect_equal(new_subject@y, 0)
+  expect_equal(new_subject@facing, "SOUTH")
+})
+
+test_that('Robot cannot fall off 0,0,WEST', {
+  subject <- new("Robot", x=0, y=0, facing="WEST")
+  new_subject <- move(subject)
+
+  expect_equal(new_subject@x, 0)
+  expect_equal(new_subject@y, 0)
+  expect_equal(new_subject@facing, "WEST")
+})
+
+test_that('Robot cannot fall off 0,4,WEST', {
+  subject <- new("Robot", x=0, y=4, facing="WEST")
+  new_subject <- move(subject)
+
+  expect_equal(new_subject@x, 0)
+  expect_equal(new_subject@y, 4)
+  expect_equal(new_subject@facing, "WEST")
+})
+
+test_that('Robot cannot fall off 0,4,NORTH', {
+  subject <- new("Robot", x=0, y=4, facing="NORTH")
+  new_subject <- move(subject)
+
+  expect_equal(new_subject@x, 0)
+  expect_equal(new_subject@y, 4)
+  expect_equal(new_subject@facing, "NORTH")
+})
+
+test_that('Robot cannot fall off 4,4,NORTH', {
+  subject <- new("Robot", x=4, y=4, facing="NORTH")
+  new_subject <- move(subject)
+
+  expect_equal(new_subject@x, 4)
+  expect_equal(new_subject@y, 4)
+  expect_equal(new_subject@facing, "NORTH")
+})
+
+test_that('Robot cannot fall off 4,4,EAST', {
+  subject <- new("Robot", x=4, y=4, facing="EAST")
+  new_subject <- move(subject)
+
+  expect_equal(new_subject@x, 4)
+  expect_equal(new_subject@y, 4)
+  expect_equal(new_subject@facing, "EAST")
+})
+
+test_that('Robot cannot fall off 4,0,EAST', {
+  subject <- new("Robot", x=4, y=0, facing="EAST")
+  new_subject <- move(subject)
+
+  expect_equal(new_subject@x, 4)
+  expect_equal(new_subject@y, 0)
+  expect_equal(new_subject@facing, "EAST")
+})
+
+test_that('Robot cannot fall off 4,0,SOUTH', {
+  subject <- new("Robot", x=4, y=0, facing="SOUTH")
+  new_subject <- move(subject)
+
+  expect_equal(new_subject@x, 4)
+  expect_equal(new_subject@y, 0)
+  expect_equal(new_subject@facing, "SOUTH")
+})
+
 
 test_that('Robot can exec turn report', {
   subject <- new("Robot")
@@ -55,6 +145,15 @@ test_that('Robot can exec turn right', {
   expect_equal(new_subject@x, 0)
   expect_equal(new_subject@y, 0)
   expect_equal(new_subject@facing, "EAST")
+})
+
+test_that('Robot can exec move', {
+  subject <- new("Robot")
+  new_subject <- exec(subject, "MOVE")
+
+  expect_equal(new_subject@x, 0)
+  expect_equal(new_subject@y, 1)
+  expect_equal(new_subject@facing, "NORTH")
 })
 
 test_that('Robot can return subject on exec unknown', {
