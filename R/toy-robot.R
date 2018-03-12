@@ -76,6 +76,18 @@ setMethod(f="move", signature="Robot", definition=function(object) {
     return(object)
 })
 
+setGeneric(name="place", def=function(object, args) {
+    standardGeneric("place")
+})
+setMethod(f="place", signature="Robot", definition=function(object, args) {
+    coordinates <- unlist(strsplit(args, ","))
+    return(new("Robot",
+      x=as.numeric(coordinates[1]),
+      y=as.numeric(coordinates[2]),
+      facing=coordinates[3]
+    ))
+})
+
 setGeneric(name="exec", def=function(object, command, args="") {
     standardGeneric("exec")
 })
@@ -83,6 +95,7 @@ setMethod(f="exec", signature="Robot",
   definition=function(object, command, args="") {
     new_object <- switch(command,
       "MOVE" = move(object),
+      "PLACE" = place(object, args),
       "LEFT" = left(object),
       "RIGHT" = right(object),
       "REPORT" = report(object)

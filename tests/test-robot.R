@@ -123,7 +123,16 @@ test_that('Robot cannot fall off 4,0,SOUTH', {
   expect_equal(new_subject@facing, "SOUTH")
 })
 
+test_that('Robot can place', {
+  subject <- new("Robot")
+  new_subject <- place(subject, "2,3,EAST")
 
+  expect_equal(new_subject@x, 2)
+  expect_equal(new_subject@y, 3)
+  expect_equal(new_subject@facing, "EAST")
+})
+
+## Test the above previously tested methods via `exec`
 test_that('Robot can exec turn report', {
   subject <- new("Robot")
   expect_output(exec(subject, "REPORT"), "0, 0, NORTH")
@@ -163,4 +172,14 @@ test_that('Robot can return subject on exec unknown', {
   expect_equal(new_subject@x, 1)
   expect_equal(new_subject@y, 2)
   expect_equal(new_subject@facing, "SOUTH")
+})
+
+
+test_that('Robot can exec place', {
+  subject <- new("Robot")
+  new_subject <- place(subject, "4,2,WEST")
+
+  expect_equal(new_subject@x, 4)
+  expect_equal(new_subject@y, 2)
+  expect_equal(new_subject@facing, "WEST")
 })
