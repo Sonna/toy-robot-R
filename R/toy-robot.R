@@ -1,5 +1,14 @@
 library(methods)
 
+make.turn <- function() {
+  return(list(
+    "NORTH" = list("LEFT" = "WEST",  "RIGHT" = "EAST"),
+    "SOUTH" = list("LEFT" = "EAST",  "RIGHT" = "WEST"),
+    "EAST"  = list("LEFT" = "NORTH", "RIGHT" = "SOUTH"),
+    "WEST"  = list("LEFT" = "SOUTH", "RIGHT" = "NORTH")
+  ))
+}
+
 setClass(
   "Robot",
 
@@ -24,6 +33,22 @@ setMethod(f="report", signature="Robot", definition=function(object) {
     cat(",", object@facing, "\n")
 })
 
+setGeneric(name="left", def=function(object) {
+    standardGeneric("left")
+})
+setMethod(f="left", signature="Robot", definition=function(object) {
+    object@facing <- make.turn()[[object@facing]][["LEFT"]]
+    return(object)
+})
+
+setGeneric(name="right", def=function(object) {
+    standardGeneric("right")
+})
+setMethod(f="right", signature="Robot", definition=function(object) {
+    object@facing <- make.turn()[[object@facing]][["RIGHT"]]
+    return(object)
+})
+
 
 setClass("ToyRobot", slots=list(nil="character"), prototype=list(nil=""))
 
@@ -44,7 +69,3 @@ setMethod(f="run", signature="ToyRobot", definition=function(object, args) {
       print(filename)
     }
 })
-
-# == References:
-# - [2\. S4 Classes — R Tutorial]
-#   (http://www.cyclismo.org/tutorial/R/s4Classes.html)
