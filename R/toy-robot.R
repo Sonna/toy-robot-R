@@ -1,5 +1,7 @@
 library(methods)
 
+options(toyrobotpkg.connection = "stdin")
+
 make.move <- function() {
   return(list(
     "NORTH" = list("x" =  0, "y" =  1),
@@ -39,7 +41,8 @@ setGeneric(name="report", def=function(object) {
 setMethod(f="report", signature="Robot", definition=function(object) {
     cat(object@x)
     cat(",", object@y)
-    cat(",", object@facing, "\n")
+    cat(",", object@facing)
+    cat("\n")
 })
 
 setGeneric(name="left", def=function(object) {
@@ -112,20 +115,51 @@ setMethod(f="exec", signature="Robot",
 
 setClass("ToyRobot", slots=list(nil="character"), prototype=list(nil=""))
 
-setGeneric(name="run", def=function(object, args) {
+setGeneric(name="run", def=function(object, args=character(0)) {
     standardGeneric("run")
 })
-setMethod(f="run", signature="ToyRobot", definition=function(object, args) {
+setMethod(f="run", signature="ToyRobot",
+  definition=function(object, args=character(0)) {
     # args = commandArgs(trailingOnly=TRUE)
     # robot <- new("Robot", x=0, y=0, facing="NORTH")
     robot <- new("Robot")
+    command <- ""
+    commandArgs <- ""
 
     if (length(args) == 0) {
-      # stop("At least one argument must be supplied (input file).\n", call.=FALSE)
-      report(robot)
+      while (!identical(command, "EXIT")) {
+        rawInput <- readLines(con=getOption("toyrobotpkg.connection"), n=1)
+        input <- unlist(strsplit(rawInput, " "))
+
+        command <- input[1]
+        if (length(input) > 1) {
+          commandArgs <- input[2]
+        }
+
+        robot <- exec(robot, command, commandArgs)
+      }
     }
     else {
       filename = args[1]
-      print(filename)
+
+      ## Create connection
+      con <- file(description=filename, open="r")
+
+      ## Hopefully you know the number of lines from some other source or
+      com <- paste("wc -l ", filename, " | awk '{ print $1 }'", sep="")
+      n <- system(command=com, intern=TRUE)
+
+      for(i in 1:n) {
+        line <- scan(file=con, what="character", nlines=1, quiet=TRUE)
+        input <- unlist(strsplit(line, " "))
+
+        command <- input[1]
+        if (length(input) > 1) {
+          commandArgs <- input[2]
+        }
+
+        robot <- exec(robot, command, commandArgs)
+      }
+      close(con)
     }
 })

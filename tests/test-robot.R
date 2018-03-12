@@ -1,6 +1,6 @@
 setwd("..")
 source("R/toy-robot.R")
-context('Toy Robot')
+context('Robot')
 
 test_that('Can create new Robot', {
   subject <- new("Robot")
