@@ -1,0 +1,6 @@
+#!/usr/bin/env Rscript
+
+# install.packages("testthat", repos='http://cran.us.r-project.org')
+source("tests/test-that.R")
+
+test_results <- test_dir("tests", reporter="summary")

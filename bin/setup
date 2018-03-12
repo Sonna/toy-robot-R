@@ -1,0 +1,7 @@
+#!/usr/bin/env Rscript
+
+install.packages("testthat", repos='http://cran.us.r-project.org')
+
+# #!/usr/bin/env bash
+#
+# R CMD INSTALL testthat

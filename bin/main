@@ -1,0 +1,8 @@
+#!/usr/bin/env Rscript
+
+# ../R/toy-robot.r
+# setwd("..")
+source("R/toy-robot.R")
+
+toyRobot <- new("ToyRobot")
+run(toyRobot, commandArgs(trailingOnly=TRUE))
